@@ -1,0 +1,1079 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "Read-only API for online cinema (movies).",
+        "version": "0.1.0"
+    },
+    "paths": {
+        "/api/v1/films/": {
+            "get": {
+                "tags": [
+                    "films"
+                ],
+                "summary": "Film Collection",
+                "description": "Get paginated film collection with genres filter and ordered by date.",
+                "operationId": "film_collection_api_v1_films__get",
+                "parameters": [
+                    {
+                        "description": "You can use only:             Action, Adventure, Animation, Biography,             Comedy, Crime, Documentary, Drama, Family, Fantasy",
+                        "required": false,
+                        "schema": {
+                            "title": "Genre",
+                            "type": "string",
+                            "description": "You can use only:             Action, Adventure, Animation, Biography,             Comedy, Crime, Documentary, Drama, Family, Fantasy"
+                        },
+                        "name": "genre",
+                        "in": "query"
+                    },
+                    {
+                        "description": "You can use only: imdb_rating, -imdb_rating, title, -title",
+                        "required": false,
+                        "schema": {
+                            "title": "Sort",
+                            "pattern": "^-?(imdb_rating|title)",
+                            "type": "string",
+                            "description": "You can use only: imdb_rating, -imdb_rating, title, -title",
+                            "default": "-imdb_rating"
+                        },
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Page",
+                            "minimum": 1.0,
+                            "type": "integer",
+                            "default": 1
+                        },
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Size",
+                            "minimum": 1.0,
+                            "type": "integer",
+                            "default": 10
+                        },
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Page_FilmDetailSchema_"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/films/{film_id}": {
+            "get": {
+                "tags": [
+                    "films"
+                ],
+                "summary": "Film Detail",
+                "description": "Get one film with related films ordered by rating.",
+                "operationId": "film_detail_api_v1_films__film_id__get",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "title": "Film Id",
+                            "type": "string"
+                        },
+                        "name": "film_id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FilmDetailSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/genres/": {
+            "get": {
+                "tags": [
+                    "genres"
+                ],
+                "summary": "Genres Collection",
+                "description": "Get genre collection with related films ordered by rating.",
+                "operationId": "genres_collection_api_v1_genres__get",
+                "parameters": [
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Page",
+                            "minimum": 1.0,
+                            "type": "integer",
+                            "default": 1
+                        },
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Size",
+                            "minimum": 1.0,
+                            "type": "integer",
+                            "default": 10
+                        },
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Page_GenreDetailSchema_"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/genres/{genre_id}": {
+            "get": {
+                "tags": [
+                    "genres"
+                ],
+                "summary": "Genres Detail",
+                "description": "Get one genre with related films ordered by rating.",
+                "operationId": "genres_detail_api_v1_genres__genre_id__get",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "title": "Genre Id",
+                            "type": "string"
+                        },
+                        "name": "genre_id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenreDetailSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/actors/": {
+            "get": {
+                "tags": [
+                    "actors"
+                ],
+                "summary": "Actor Collection",
+                "description": "Get actors collection with related films ordered by rating.",
+                "operationId": "actor_collection_api_v1_actors__get",
+                "parameters": [
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Page",
+                            "minimum": 1.0,
+                            "type": "integer",
+                            "default": 1
+                        },
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Size",
+                            "minimum": 1.0,
+                            "type": "integer",
+                            "default": 10
+                        },
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Page_PersonDetailSchema_"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/actors/{actor_id}": {
+            "get": {
+                "tags": [
+                    "actors"
+                ],
+                "summary": "Actor Detail",
+                "description": "Get one actor with related films ordered by rating.",
+                "operationId": "actor_detail_api_v1_actors__actor_id__get",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "title": "Actor Id",
+                            "type": "string"
+                        },
+                        "name": "actor_id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PersonDetailSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/writers/": {
+            "get": {
+                "tags": [
+                    "writers"
+                ],
+                "summary": "Writer Collection",
+                "description": "Get writers collection with related films ordered by rating.",
+                "operationId": "writer_collection_api_v1_writers__get",
+                "parameters": [
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Page",
+                            "minimum": 1.0,
+                            "type": "integer",
+                            "default": 1
+                        },
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Size",
+                            "minimum": 1.0,
+                            "type": "integer",
+                            "default": 10
+                        },
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Page_PersonDetailSchema_"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/writers/{writer_id}": {
+            "get": {
+                "tags": [
+                    "writers"
+                ],
+                "summary": "Actor Detail",
+                "description": "Get one writer with related films ordered by rating.",
+                "operationId": "actor_detail_api_v1_writers__writer_id__get",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "title": "Writer Id",
+                            "type": "string"
+                        },
+                        "name": "writer_id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PersonDetailSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/directors/": {
+            "get": {
+                "tags": [
+                    "directors"
+                ],
+                "summary": "Director Collection",
+                "description": "Get directors collection with related films ordered by rating.",
+                "operationId": "director_collection_api_v1_directors__get",
+                "parameters": [
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Page",
+                            "minimum": 1.0,
+                            "type": "integer",
+                            "default": 1
+                        },
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Size",
+                            "minimum": 1.0,
+                            "type": "integer",
+                            "default": 10
+                        },
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Page_PersonDetailSchema_"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/directors/{director_id}": {
+            "get": {
+                "tags": [
+                    "directors"
+                ],
+                "summary": "Director Detail",
+                "description": "Get one director with related films ordered by rating.",
+                "operationId": "director_detail_api_v1_directors__director_id__get",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "title": "Director Id",
+                            "type": "string"
+                        },
+                        "name": "director_id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PersonDetailSchema"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/search/": {
+            "get": {
+                "tags": [
+                    "search"
+                ],
+                "summary": "Search Collection",
+                "description": "Search films with title.",
+                "operationId": "search_collection_api_v1_search__get",
+                "parameters": [
+                    {
+                        "description": "Film title or its part",
+                        "required": false,
+                        "schema": {
+                            "title": "Title",
+                            "type": "string",
+                            "description": "Film title or its part",
+                            "default": "Star"
+                        },
+                        "name": "title",
+                        "in": "query"
+                    },
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Page",
+                            "minimum": 1.0,
+                            "type": "integer",
+                            "default": 1
+                        },
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Size",
+                            "minimum": 1.0,
+                            "type": "integer",
+                            "default": 10
+                        },
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Page_SearchDetailSchema_"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "FilmDetailSchema": {
+                "title": "FilmDetailSchema",
+                "required": [
+                    "id",
+                    "title",
+                    "genre__name",
+                    "director__full_name",
+                    "writer__full_name",
+                    "actor__full_name",
+                    "genre",
+                    "director",
+                    "writer",
+                    "actor"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "type": "string"
+                    },
+                    "title": {
+                        "title": "Title",
+                        "type": "string"
+                    },
+                    "imdb_rating": {
+                        "title": "Imdb Rating",
+                        "type": "number"
+                    },
+                    "type": {
+                        "title": "Type",
+                        "type": "string"
+                    },
+                    "creation_date": {
+                        "title": "Creation Date",
+                        "type": "string"
+                    },
+                    "description": {
+                        "title": "Description",
+                        "type": "string"
+                    },
+                    "genre__name": {
+                        "title": "Genre  Name",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "director__full_name": {
+                        "title": "Director  Full Name",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "writer__full_name": {
+                        "title": "Writer  Full Name",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "actor__full_name": {
+                        "title": "Actor  Full Name",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "genre": {
+                        "title": "Genre",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/GenreMixin"
+                        }
+                    },
+                    "director": {
+                        "title": "Director",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PersonMixin"
+                        }
+                    },
+                    "writer": {
+                        "title": "Writer",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PersonMixin"
+                        }
+                    },
+                    "actor": {
+                        "title": "Actor",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PersonMixin"
+                        }
+                    }
+                }
+            },
+            "FilmIDMixin": {
+                "title": "FilmIDMixin",
+                "required": [
+                    "id"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "type": "string"
+                    }
+                }
+            },
+            "GenreDetailSchema": {
+                "title": "GenreDetailSchema",
+                "required": [
+                    "id",
+                    "name",
+                    "film"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "type": "string"
+                    },
+                    "name": {
+                        "title": "Name",
+                        "type": "string"
+                    },
+                    "film": {
+                        "title": "Film",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/FilmIDMixin"
+                        }
+                    }
+                }
+            },
+            "GenreMixin": {
+                "title": "GenreMixin",
+                "required": [
+                    "id",
+                    "name"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "type": "string"
+                    },
+                    "name": {
+                        "title": "Name",
+                        "type": "string"
+                    }
+                }
+            },
+            "HTTPValidationError": {
+                "title": "HTTPValidationError",
+                "type": "object",
+                "properties": {
+                    "detail": {
+                        "title": "Detail",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        }
+                    }
+                }
+            },
+            "Page_FilmDetailSchema_": {
+                "title": "Page[FilmDetailSchema]",
+                "required": [
+                    "items",
+                    "total",
+                    "page",
+                    "size"
+                ],
+                "type": "object",
+                "properties": {
+                    "items": {
+                        "title": "Items",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/FilmDetailSchema"
+                        }
+                    },
+                    "total": {
+                        "title": "Total",
+                        "minimum": 0.0,
+                        "type": "integer"
+                    },
+                    "page": {
+                        "title": "Page",
+                        "minimum": 1.0,
+                        "type": "integer"
+                    },
+                    "size": {
+                        "title": "Size",
+                        "minimum": 1.0,
+                        "type": "integer"
+                    }
+                }
+            },
+            "Page_GenreDetailSchema_": {
+                "title": "Page[GenreDetailSchema]",
+                "required": [
+                    "items",
+                    "total",
+                    "page",
+                    "size"
+                ],
+                "type": "object",
+                "properties": {
+                    "items": {
+                        "title": "Items",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/GenreDetailSchema"
+                        }
+                    },
+                    "total": {
+                        "title": "Total",
+                        "minimum": 0.0,
+                        "type": "integer"
+                    },
+                    "page": {
+                        "title": "Page",
+                        "minimum": 1.0,
+                        "type": "integer"
+                    },
+                    "size": {
+                        "title": "Size",
+                        "minimum": 1.0,
+                        "type": "integer"
+                    }
+                }
+            },
+            "Page_PersonDetailSchema_": {
+                "title": "Page[PersonDetailSchema]",
+                "required": [
+                    "items",
+                    "total",
+                    "page",
+                    "size"
+                ],
+                "type": "object",
+                "properties": {
+                    "items": {
+                        "title": "Items",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PersonDetailSchema"
+                        }
+                    },
+                    "total": {
+                        "title": "Total",
+                        "minimum": 0.0,
+                        "type": "integer"
+                    },
+                    "page": {
+                        "title": "Page",
+                        "minimum": 1.0,
+                        "type": "integer"
+                    },
+                    "size": {
+                        "title": "Size",
+                        "minimum": 1.0,
+                        "type": "integer"
+                    }
+                }
+            },
+            "Page_SearchDetailSchema_": {
+                "title": "Page[SearchDetailSchema]",
+                "required": [
+                    "items",
+                    "total",
+                    "page",
+                    "size"
+                ],
+                "type": "object",
+                "properties": {
+                    "items": {
+                        "title": "Items",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SearchDetailSchema"
+                        }
+                    },
+                    "total": {
+                        "title": "Total",
+                        "minimum": 0.0,
+                        "type": "integer"
+                    },
+                    "page": {
+                        "title": "Page",
+                        "minimum": 1.0,
+                        "type": "integer"
+                    },
+                    "size": {
+                        "title": "Size",
+                        "minimum": 1.0,
+                        "type": "integer"
+                    }
+                }
+            },
+            "PersonDetailSchema": {
+                "title": "PersonDetailSchema",
+                "required": [
+                    "id",
+                    "full_name",
+                    "film"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "type": "string"
+                    },
+                    "full_name": {
+                        "title": "Full Name",
+                        "type": "string"
+                    },
+                    "film": {
+                        "title": "Film",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/FilmIDMixin"
+                        }
+                    }
+                }
+            },
+            "PersonMixin": {
+                "title": "PersonMixin",
+                "required": [
+                    "id",
+                    "full_name"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "type": "string"
+                    },
+                    "full_name": {
+                        "title": "Full Name",
+                        "type": "string"
+                    }
+                }
+            },
+            "SearchDetailSchema": {
+                "title": "SearchDetailSchema",
+                "required": [
+                    "id",
+                    "title",
+                    "genre__name",
+                    "director__full_name",
+                    "writer__full_name",
+                    "actor__full_name",
+                    "genre",
+                    "director",
+                    "writer",
+                    "actor"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "type": "string"
+                    },
+                    "title": {
+                        "title": "Title",
+                        "type": "string"
+                    },
+                    "imdb_rating": {
+                        "title": "Imdb Rating",
+                        "type": "number"
+                    },
+                    "type": {
+                        "title": "Type",
+                        "type": "string"
+                    },
+                    "creation_date": {
+                        "title": "Creation Date",
+                        "type": "string"
+                    },
+                    "description": {
+                        "title": "Description",
+                        "type": "string"
+                    },
+                    "genre__name": {
+                        "title": "Genre  Name",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "director__full_name": {
+                        "title": "Director  Full Name",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "writer__full_name": {
+                        "title": "Writer  Full Name",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "actor__full_name": {
+                        "title": "Actor  Full Name",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "genre": {
+                        "title": "Genre",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/GenreMixin"
+                        }
+                    },
+                    "director": {
+                        "title": "Director",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PersonMixin"
+                        }
+                    },
+                    "writer": {
+                        "title": "Writer",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PersonMixin"
+                        }
+                    },
+                    "actor": {
+                        "title": "Actor",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PersonMixin"
+                        }
+                    }
+                }
+            },
+            "ValidationError": {
+                "title": "ValidationError",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "loc": {
+                        "title": "Location",
+                        "type": "array",
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        }
+                    },
+                    "msg": {
+                        "title": "Message",
+                        "type": "string"
+                    },
+                    "type": {
+                        "title": "Error Type",
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

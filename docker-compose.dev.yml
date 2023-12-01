@@ -1,0 +1,83 @@
+version: "3.8"
+
+services:
+
+  elasticsearch:
+    image: elasticsearch:7.7.0
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch-one/data
+    ports:
+      - 9200:9200
+    env_file:
+      - ./env/elasticsearch/.env.dev
+
+  redis:
+    image: redis:7.0.8
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 50M
+    volumes:
+      - redis_data:/data
+    ports:
+      - 6379:6379
+    env_file:
+      - ./env/redis/.env.dev
+
+  kibana:
+    container_name: kibana
+    image: kibana:7.7.0
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    depends_on:
+      elasticsearch:
+        condition: service_started
+
+  api:
+    build:
+      context: ./fastapi/src
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./env:/env
+      - ./.env:/.env
+      - ./fastapi/src:/fastapi/src
+    ports:
+      - 8000:8000
+    depends_on:
+      elasticsearch:
+        condition: service_started
+      redis:
+        condition: service_started
+    env_file:
+      - ./env/api/.env.dev
+      - ./env/postgres/.env.dev
+      - ./env/redis/.env.dev
+      - ./env/docker/.env.dev
+      - ./env/elasticsearch/.env.dev
+      - ./.env
+
+  tests_functional:
+    build:
+      context: ./functional
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./env:/env
+      - ./.env:/.env
+      - ./functional:/functional
+    depends_on:
+      api:
+        condition: service_started
+    env_file:
+      - ./env/postgres/.env.dev
+      - ./env/redis/.env.dev
+      - ./env/docker/.env.dev
+      - ./env/elasticsearch/.env.dev
+      - ./.env
+volumes:
+  elasticsearch_data:
+  redis_data:
